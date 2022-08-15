@@ -1,0 +1,264 @@
+# Machine Learning Fundamentals: Predicting Variables Using Neural Networks
+
+In the previous sessions we learnt how to read and explore data with multiple variables/dimensions in R, as well as how to build a spam filter using machine learning (Naive Bayes). Finally, we will learn how to build a simple neural network using R. 
+
+Recall that neural networks are machine learning algorithms inspired by the biology of the brain and which can be used for the two following tasks:
+
+A) Prediction: Using a set of independent variables to "predict" a dependent variable (just as in linear regression, only with multiple variables).
+
+B) Classification: Clasifying an individual observation into one of the possible groups of classes.
+
+In this session we will build a neural network to predict the strength of concrete. To do so, we will use data from 1030 different types of concrete, each with a different age and composition. 
+
+
+
+Before starting this session we need to install a new R libraries called "neuralnet." To install this library, simply run the following line of code.
+
+```{r, eval=FALSE}
+install.packages("neuralnet")
+```
+
+Let's now load the required libraries.
+
+```{r, message=FALSE, warning=FALSE}
+library(neuralnet)
+library(pheatmap)
+library(corrplot)
+library(ggplot2)
+```
+
+
+You can find the data for this session in the "Data" directory, along with the other materials for this course. The file is called "concrete.csv". Let's read this into R.
+
+```{r, message=FALSE, warning=FALSE}
+concrete <- read.csv("./Data/concrete.csv")
+```
+
+We use the head function to look at the first 6 lines of the table.
+
+```{r, message=FALSE, warning=FALSE}
+head(concrete)
+```
+
+We can see that this data contains measurements on the following characteristics of concrete:
+
+1. Amount of cement (kg/m3)
+2. Amount of slag (kg/m3)
+3. Amount of ash (kg/m3)
+4. Amount of water (kg/m3)
+5. Amount of superplasticizer (kg/m3)
+6. Amount of coarse aggregate (kg/m3)
+7. Amount of fine aggregate (kg/m3)
+8. Aging time (days)
+9. Compressive strength
+
+Let's now use the dim() function to find out how many samples of concrete were measured:
+
+```{r, message=FALSE, warning=FALSE}
+dim(concrete)
+```
+
+Our data contains measurements on 1,030 different samples of concrete.
+
+## Normalising data
+
+Before analysing the data, let's use the summary() function to find out how each variable behaves.
+
+```{r, message=FALSE, warning=FALSE}
+summary(concrete)
+```
+
+Note that while the amount of cement can go from 102 to 540 kg/m3, the amount of coarse aggregate can go from 801 to 1029 kg/m3. These ranges are very different to each other, so we cannot compare simply compare both measurements! Moreover, NEURAL NETWORKS ONLY WORK ON VALUES CLOSE TO ZERO. Because of these two reasons, let's "rescale" the values of all columns, so that they go from 0 to 1 only. This process is called "rescaling" or "normalisation".
+
+We define a function called "normalisation", which takes a series of numbers (x) and normalises it, so that the numbers go from 0 to 1 only. The function finally resturns all of these "new x" values. 
+
+```{r, message=FALSE, warning=FALSE}
+normalise <- function(x){
+  new.x <- (x -min(x))/(max(x)-min(x))
+}
+```
+
+Next, we apply this function to all the columns of our data. We do this using "apply". We set the MARGIN to 2, because we want to apply the function to the columns. We store the new data in a variable called "concrete_norm" (norm for normalised).
+
+```{r}
+concrete_norm <- as.data.frame(apply(concrete, MARGIN=2, normalise))
+```
+
+Let's use head() to look at the first lines of the data.
+```{r, message=FALSE, warning=FALSE}
+head(concrete_norm)
+```
+
+We see that now all values are between zero and one. To verify that this is the case, let's use the summary function.
+
+```{r, message=FALSE, warning=FALSE}
+summary(concrete_norm)
+```
+
+Indeed, notice how the minimum and maximum values are 0 and 1 respectively for ALL columns in our table. Now we are ready to analyse the data.
+
+## Visualising data
+
+Before building our neural network, let's use the techniques we have learnt before to explore the concrete data. For example, let's calculate the correlation matrix.
+
+```{r, message=FALSE, warning=FALSE}
+corrmat <- cor(concrete_norm)
+```
+
+Let's use corrplot() to visualise the correlation matrix. We will ask R to plot the most similar variables together (recall that we can do this by setting order="hclust").
+
+```{r, message=FALSE, warning=FALSE}
+corrplot(corrmat,
+         type = "upper",
+         method = "ellipse",
+         order = "hclust")
+```
+
+We can already conclude some things from this graph. For example, the strength of concrete is highly correlated with the amount of cement we put in it. Thus, if we want to build stronger concrete we might need to add more cement. We can also see that the amount of superplasticizer is inversely proportional to the aging time. This might mean that as concrete ages, the plasticizer is degraded and disappears.
+
+Let's now use the data to build a heat map.
+
+```{r, message=FALSE, warning=FALSE}
+pheatmap(concrete_norm, show_rownames = F)
+```
+
+From this graph we get even further information. For instance, notice how there are at least 6 different "types" of concrete (you can see this in the way rows have been ordered into a tree).
+
+Finally, let's try to reduce the dimensions of the data using PCA.
+
+```{r, message=FALSE, warning=FALSE}
+pcs <- prcomp(concrete_norm)
+```
+
+A closer look at PC1 and PC2 tells us that one of the main differences between different concretes is the amount of ash. In fact, PC1 (our most important new axis) separates concretes into those with low ash content and those with high ash content. 
+
+```{r, message=FALSE, warning=FALSE}
+ggplot(data.frame(pcs$x), aes(PC1, PC2)) + 
+  geom_point(aes(color=concrete_norm$ash)) +
+  scale_color_continuous(name="Ash") +
+  theme_bw()
+```
+
+
+We have learnt a lot from the data already, but we still do not know how to predict its strength. If we know the composition of a concrete sample, can we predict how strong it will be and, thus, which things we should and should not build with it? Let's build a neural network to answer this question.
+
+## Creating neural network
+
+Remember that machine learning is done in two steps: training and testing. Thus, let's first divide the data into a training and a testing set.
+
+### Spliting data into training and testing sets
+
+We will allocate 75% of our observations (773 in total) to the training data set and the remaining 25% (257) to the testing data set.
+
+```{r, message=FALSE, warning=FALSE}
+concrete_training <- concrete_norm[1:773,]
+concrete_testing <- concrete_norm[773:1030,]
+```
+
+### Training neural network
+
+Now we are able to build and test the neural network. To do this, we will use the neuralnet() function, specifying which are the independent and which the dependent variables (into a formula). For now, let's build the most simple possible network: one with just one hidden node! 
+
+```{r, message=FALSE, warning=FALSE}
+my_NN <- neuralnet(strength ~ cement + slag + ash + water + 
+                     superplastic + coarseagg + fineagg + age,
+                   data = concrete_training,
+                   hidden = 1)
+```
+
+Our network has been trained! Let's have a look at its shape (its topology) using the plot function.
+
+```{r, message=FALSE, warning=FALSE}
+plot(my_NN)
+```
+
+Notice that it more than 1,000 iterations to build this network, despite it being so simple.
+
+### Testing neural network
+
+Now we can test the performance of the network. We use the compute() function to try and predict the strength of concrete in the testing set.
+
+```{r, message=FALSE, warning=FALSE}
+results <- compute(my_NN, concrete_testing[,1:8])
+```
+
+Let's use head() to look at the first 6 predictions done by our network.
+```{r, message=FALSE, warning=FALSE}
+head(results$net.result)
+```
+
+### Evaluating performance
+
+Finally, let's evaluate how well these predictions are by comparing them with the true concrete strength. This is possible because we knew the true values from the beginning! Let's build a scatter plot of prediciton versus reality.
+
+```{r, message=FALSE, warning=FALSE}
+plot(concrete_testing$strength, results$net.result, 
+     main = "Artificial NN with 3 layers and 1 hidden node",
+     xlab="True concrete strength",
+     ylab="Predicted concrete strength")
+abline(lm(results$net.result ~ concrete_testing$strength))
+```
+
+Notice how well the network perform, despite being so simple! In fact, if we calculate the correlation we'll see that it is higher than 0.8
+
+```{r, message=FALSE, warning=FALSE}
+cor(concrete_testing$strength, results$net.result)
+```
+
+### Improving performance by adding hidden nodes
+
+However, these predictions are still not good enough. What if we wanted to evaluate which concrete is the best for a really important bridge? We cannot risk overestimating the strength and making a bridge collapse! Thus, let's try to improve our predictions. To do this, we will recreate the network, but now making it much more complex. In fact, let's add 6 hidden nodes to the middle layer.
+
+```{r, message=FALSE, warning=FALSE}
+my_NN <- neuralnet(strength ~ cement + slag + ash + water + 
+                     superplastic + coarseagg + fineagg + age,
+                   data = concrete_training,
+                   hidden = 6)
+```
+
+The new topology of the network looks as follows:
+
+```{r, message=FALSE, warning=FALSE}
+plot(my_NN)
+```
+
+Note how it took more than 50,000 iterations to build this network configuration!!!
+
+Let's predict the concrete strengths again, using the new neural network.
+```{r, message=FALSE, warning=FALSE}
+results <- compute(my_NN, concrete_testing[,1:8])
+```
+
+To evaluate the performance, let's plot the predicted values versus the true values.
+
+```{r, message=FALSE, warning=FALSE}
+plot(concrete_testing$strength, results$net.result, 
+     main = "Artificial NN with 3 layers and 6 hidden nodes",
+     xlab="True concrete strength",
+     ylab="Predicted concrete strength")
+abline(lm(results$net.result ~ concrete_testing$strength))
+```
+
+The points fall in an almost perfect line! In fact, if we calculate the correlation we will notice that it has improved to more than 0.9. 
+
+```{r, message=FALSE, warning=FALSE}
+cor(concrete_testing$strength, results$net.result)
+```
+
+This means that our neural network correctly predicts the strength of concrete using these 8 variables. We can now be confident enough to use it in new data.
+
+## Conclusions
+
+Now you know how to build simple neural networks in R. You can apply this knowledge to predict or classify any data you might be interested in.
+
+## References
+
+This turotial was adapted from: 
+
+1. Lantz B. (2013). Chapter 7. Neural Networks and Support Vector Machines in Machine Learning with R. Birmingham: Packt Publishing. 
+
+
+
+Concrete strength data comes from the following study:
+
+2. Yeh IC. (1998). Modelling of strength of high performance concrete using artificial neural networks. Cemenr and Concrete Research. Vol 28. pp 1797-1808.
