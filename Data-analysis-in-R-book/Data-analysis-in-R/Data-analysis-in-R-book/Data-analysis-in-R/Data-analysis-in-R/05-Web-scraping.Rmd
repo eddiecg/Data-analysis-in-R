@@ -1,0 +1,348 @@
+# Web scraping in R
+
+During this session, we will learn how to use R to perform "web scraping". Web scraping, aslfo called web harvesting, is the extraction of data from websites in an ordered and structured manner. We have all done web scraping in its simplest form: simply "copying and pasting". However, sometimes the information on a website is extremely unstructured (buried in the text or in formats which are difficult to interpret), and it would be time consuming to copy and paste all the information we need by hand. Furthermore, often we need to scrape not one but tends or hundreds of aspects of a website; and often this has to be repeated for multiple websites too. Hence, developing methods for atuomated web scraping is central in big data and data analysis.
+
+The R package "rvest" can be used for web scraping. Let's first install it. We will also install "wordcloud", which can be used for processing text data.
+```{r, eval=FALSE}
+install.packages("rvest")
+install.packages("wordcloud")
+```
+
+Now let's load it. We will also load the ggplot2 and ggrepel packages for data visualisation.
+```{r}
+library(rvest)
+library(ggplot2)
+library(ggrepel)
+library(wordcloud)
+```
+
+For eficient web scraping, you will need the "Selector Gadget". Make sure you have a working version of Google Chrome installed. Next, use Chrome to open the following link:
+
+https://chrome.google.com/webstore/detail/selectorgadget/mhjhnkcfbdhnjickkkdbjoemdmbfginb?hl=en
+
+Finally, click the "Add to chrome" buttom, it should only take a few seconds. Now the Selector Gadget is ready to use. 
+
+## Example: Scraping the IMDB website
+
+For the purpose of this tutorial, we will be scraping the IMDB website, which contains raiting and information for films. Let's focus specifically on the following website, which contains the 100 most popular films released between January and December 2016:
+
+http://www.imdb.com/search/title?count=100&release_date=2016,2016&title_type=feature
+
+Take some time to explore the website and its metrics. Notice that, for each film, IMDB contains information such as its title, portrait, rating, staring actors, rank, genre, duration, etc...
+
+The first fact we have to realise is that websites are simply files, just as our word files or spreadsheets are files. They are files written in the "hyper-text markup language" (html). Every time we access a website, we specify our computer the location of such file via a "Uniform resource locator" (URL) and the computer displays the file using a browser (Chrome, Safari, Firefox, etc...). Browsers simply translate the HTML language to something easy for us to visualise: an arrangement of images, colours, text, links, and other objects.
+
+We can easily open html files in R just as we have previously opened spreadsheets (CSV files), text files or tables. We use the function "read_html()", which is part of the rvest package. Let's read the top 100 2016 IMDB films website into R. We'll assign the content to a variable called "webpage".
+
+```{r}
+webpage <- read_html("http://www.imdb.com/search/title?count=100&release_date=2016,2016&title_type=feature")
+```
+
+Let's look at the content of "webpage":
+```{r}
+webpage
+```
+
+Note that it is an xml document and that it contains several fields, written in HTML (HTML is a language characterised by a lot of < > symbols). Inside this variable is contained all the information we can see when scrolling in our browser.
+
+## Extracting variables using CSS selectors
+
+Now let' move to Chrome. We will use Chrome's "Selector Gadget"" to retrieve specific fields/variables from the website. To activate the selector gadget, click on the magnifying glass at the top right corner of the browser. Now, if you move your pointer around the website, you will see different sections being highlighted. Find any section that interests you (for example, one of the pirctureS) and click on it. You will see that a string of text appears in the bottom right corner of the screen. This text is called the "CSS selector". You can think of CSS selectors as "unique identifiers" of specific elements on a website. For example, you'll notice that when you clicked the film's image all the other images were also highlighted. This is because that CSS elector identifies ALL the film covers. This is useful because we can use this text to extract all of them, instead of copying and pasting 100 images one by one. Let's apply this to web scraping.
+
+1. Using the Selector Gadget, click on the title of the first film. You should see the entirety of he title highlighted in yellow. The text ".lister-item-header" will appear at the bottom right. This is the CSS selector for movie titles. Copy that text.
+
+2. Now use the function "html_nodes" and specify that you want to extract the film titles by pasting the CSS selector, as follows:
+
+```{r}
+title_data_html <- html_nodes(webpage,'.lister-item-header a')
+```
+
+The titles have now been scraped! Let's see how they look:
+```{r}
+head(title_data_html)
+```
+
+We cannot understand anything because they are in HTML language! Let's convert them to normal textusing the function "html_text()". We'll store these titles in the variable "title_data".
+```{r}
+title_data <- html_text(title_data_html)
+```
+
+Now they are understandable to us:
+```{r}
+title_data
+```
+
+## Scraping multiple fields from a website
+
+**A) IMDB ranking:**
+
+Now we have the titles for the top 100 2016 IMDB films, but if we want to do any serious analysis on them we will need more data. Let's repeat the previous process and use CSS selectors to scrap more fields. We start by scraping the rankings:
+```{r}
+rank_data_html <- html_nodes(webpage,'.text-primary')
+```
+
+We convert the rankings from html to text in the same way we did above:
+```{r}
+rank_data <- html_text(rank_data_html)
+```
+
+However, note that the rankings shouldn't really be text, but numbers.
+```{r}
+head(rank_data)
+```
+
+Let's use as.numeric() to convert them into nummeric variables. We'll store this in the variable "rank_data".
+```{r}
+rank_data <- as.numeric(rank_data)
+```
+
+Now they look better.
+```{r}
+rank_data
+```
+
+**B) Film duration:**
+
+Let's repeat the same process to extrac the duration of each film, which in IMDB is called "runtime".
+```{r}
+runtime_data_html <- html_nodes(webpage,'.runtime')
+runtime_data <- html_text(runtime_data_html)
+runtime_data
+```
+
+Again, this variable isn't really a text but a number (number of minutes). Let's first remove the text " minute" from every element using gsub().
+
+```{r}
+runtime_data <- gsub(" min","",runtime_data)
+```
+
+Now let's transform the text to nummeric and store it in the variable "runtime_data".
+```{r}
+runtime_data<-as.numeric(runtime_data)
+```
+
+It looks much better!
+
+```{r}
+runtime_data
+```
+
+**C) Film genre:**
+
+Now let's scrape the genre of each movie.
+```{r}
+genre_data_html <- html_nodes(webpage,'.genre')
+genre_data <- html_text(genre_data_html)
+```
+
+```{r}
+head(genre_data)
+```
+
+There are several problems here: firstly, there is a lot of extra space. Secondly, all the genres start with the new line (\n) symbol. Finally, there are multiple genres for each film. Let's fix these issues one by one.
+
+First, we remove the new line symbols using gsub().
+```{r}
+genre_data<-gsub("\n","",genre_data)
+```
+
+Next, we do the same to remove empty spaces.
+```{r}
+genre_data<-gsub(" ","",genre_data)
+```
+
+Finally, let's use gsub() to remove all the additional genres. We only keep the first one for each film.
+```{r}
+genre_data<-gsub(",.*","",genre_data)
+genre_data
+```
+
+But perhaps text is not the best way to store this information. It is, in the end, a list with categories. It would be much better to have this as a factor variable. We thus convert it into a factor.
+```{r}
+genre_data<-as.factor(genre_data)
+```
+
+Now it looks much better!
+```{r}
+genre_data
+```
+
+**D) IMDB rating:**
+
+We use CSS selectors to scrap the IMDB rating section. Then, we convert these ratings to numbers.
+```{r}
+rating_data_html <- html_nodes(webpage,'.ratings-imdb-rating strong')
+rating_data <- html_text(rating_data_html)
+rating_data<-as.numeric(rating_data)
+rating_data
+```
+
+**E) Film description:**
+
+Finally, we use CSS selectors to retrieve the description of each film. Each description is a paragraph summarising the content of the film.
+
+```{r}
+description_data_html <- html_nodes(webpage,'.ratings-bar+ .text-muted')
+description_data <- html_text(description_data_html)
+head(description_data)
+```
+
+We remove the new line symbol and the extra spaces.
+```{r}
+description_data<-gsub("\n","",description_data)
+description_data<-gsub("  ","",description_data)
+head(description_data)
+```
+
+
+Now that we have scraped all of those variables, we can put them together into one single table. Let's use the data.frame() function to build a table where each of the variables we scraped before will become a column:
+
+```{r}
+films <- data.frame(Title=title_data, Genre=genre_data, Runtime=runtime_data, Rank=rank_data, IMDB_rating=rating_data, Description=description_data)
+```
+
+Let's have a look at the data set.
+```{r}
+head(films)
+```
+
+It looks structured and contains all the data we wanted. Now we can start analysing it.
+
+## Performing exploratory data analysis (EDA) on scraped data
+
+Let's explore the IMDB data we scraped. To do so, we will apply some of the principles and techniques for univariate and bivariate data expolation we learnt about in the previous sessions.
+
+The first thing we always have to do when analysing data is looking at it. so let's create a histogram of film duration and add a line representing the average (mean).
+
+```{r}
+hist(films$Runtime, breaks=20, col="grey", main="IMDB film duration", xlab="Runtime (minutes)")
+abline(v=mean(films$Runtime), col="blue")
+```
+
+We see that film duration is unimodal (with one single bump). Most films last about one and a half hours, while very few last more than 2 and a half hours.
+
+Now let's look at the rating IMDB has assigned to each film. We can visualise this as a stripchart.
+
+```{r}
+stripchart(films$IMDB_rating, method = "stack", pch=19, main="IMDB film rating", xlab="Rating")
+```
+
+We almost never see a rating below 5. This makes sense because, in the end, we are only looking at the top 100 films of the year, so perhaps all the lowly rated films did not make it to this list. There are also very few films with a rating higher than 8.
+
+Now let's use ggplot to create a scatter plot of rating and duration. Is there any relation between the duration of a film and how good or badly it is rated?
+
+```{r}
+ggplot(data=films, aes(x=Runtime, y=IMDB_rating)) + 
+  geom_point() + 
+  xlab("Runtime (minutes)") +
+  ylab("Rating") +
+  theme_bw() 
+```
+
+Just by eye, we can see little relation between both variables. This also makes sense: knowing how long a film is does not necesarilly tell us anything about how good or bad it is.
+
+Let's corroborate this by alculating the correlation between both variables.
+
+```{r}
+cor(films$Runtime, films$IMDB_rating)
+```
+
+The correlation is indeed very low, but it is still possitive! This means that perhaps, even though we cannot really see this correlation by eye, longer films tend to get ranked slightly better.
+
+
+Let's find which are the top 10 films of 2016 by IMDB rating:
+```{r}
+top10films <- films[order(-films$IMDB_rating),][1:10,]
+top10films
+```
+
+Now let's add their name labels to the previous plot using geom_text_repel().
+
+```{r}
+ggplot(data=films, aes(x=Runtime, y=IMDB_rating)) + 
+  geom_point(size=2) +
+  geom_text_repel(data=top10films, aes(label=Title)) +
+  xlab("Runtime (minutes)") +
+  ylab("Rating") +
+  theme_bw() 
+```
+
+We can even colour code the films by genre.
+```{r}
+ggplot(data=films, aes(x=Runtime, y=IMDB_rating)) + 
+  geom_point(aes(color=Genre),size=2) +
+  geom_text_repel(data=top10films, aes(label=Title)) +
+  xlab("Runtime (minutes)") +
+  ylab("Rating") +
+  theme_bw() 
+```
+
+However, it is very difficult to distinguis the different colours. In general, it's not a good idea to display three variables at the same time if we do not have to.
+
+For now, let's focus only on the IMDB ranking and the genre. We can create box plots to compare the ranking of each group:
+
+```{r}
+ggplot(data=films, aes(x=Genre, y=IMDB_rating)) + 
+  geom_boxplot() +
+  xlab("Genre") +
+  ylab("Rating") +
+  theme_bw() 
+```
+
+However note that now we are losing a lot of valuable information on what the individual ratings are. This is because box plots then to "over summarise" the data. Let's use instead a better alternative called "violin plot", which is a way to compare density plots for multiple groups.
+
+```{r}
+ggplot(data=films, aes(x=Genre, y=IMDB_rating)) + 
+  geom_violin(fill="light blue") +
+  xlab("Genre") +
+  ylab("Rating") +
+  theme_bw() 
+```
+
+We can even add the individual points to ech of this plots too:
+```{r}
+ggplot(data=films, aes(x=Genre, y=IMDB_rating)) + 
+  geom_violin(fill="light blue") +
+  geom_jitter(width=0.2) +
+  xlab("Genre") +
+  ylab("Rating") +
+  theme_bw() 
+```
+
+Now we see that there is one Crime film with very poor rating compared to the rest. Other than that, all genres seem to be more or less equally popular.
+
+Let's repeat the same procedure, but now analysing the duration of each film stratified by genre.
+```{r}
+ggplot(data=films, aes(x=Genre, y=Runtime)) + 
+  geom_violin(fill="light blue") +
+  geom_jitter(width=0.2) +
+  xlab("Genre") +
+  ylab("Rating") +
+  theme_bw() 
+```
+
+Now we find something interesting: most of the animation films are much shorter than films of any other genre. In fact, none of them lasts ore than an hour and a half. Some action films, on the other hand, go up to 2.5 hours. This makes sense too, since most animation films are designed for kids, who cannot possibly pay attention to a 2 or 3-hour long film.
+
+Finally, let's use the function "wordcloud()" to find out which are the most commonly used words to describe these 100 films. For a word to be included in the cloud it has to appear at least 3 times in the description. The size of each word is proportional to the number of times it appears.
+
+```{r}
+wordcloud(films$Description, scale=c(3,0.3))
+```
+
+We see that a lot of films are described using words such as "world", "must" and "new".
+
+Now you know how to perform web scraping with R and how to retrieve specific data from a website for further analysis. 
+
+## Exercises
+
+If you want to obtain more web scraping experience, you can do the following:
+
+1) Visit your favourite website
+2) Use the Selector Gadget to retrieve the CSS selector for different sections of the site
+3) Use R and the CSS selector to scrap the data that most interests you
+4) Transform the variables to the appropriate format in R
+5) Visualise them. What can you learn from this data?
+
+## References
+
+1) Kaushik S. (March 27, 2017). Beginner's guide on web scraping in R using rvest. Available from: https://www.analyticsvidhya.com/blog/2017/03/beginners-guide-on-web-scraping-in-r-using-rvest-with-hands-on-knowledge/

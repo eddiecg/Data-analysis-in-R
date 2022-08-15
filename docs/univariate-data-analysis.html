@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 2 Univariate Data Analysis | Fundamentals of Data Analysis in R</title>
+  <meta name="description" content="<p>This is a collection of tutorials that illustrate how to analyse data in R.
+The topics touched on this collection span univariate data analysis, multivariate data analysis, and fundamentals of machine learning.</p>" />
+  <meta name="generator" content="bookdown 0.28.1 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 2 Univariate Data Analysis | Fundamentals of Data Analysis in R" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="<p>This is a collection of tutorials that illustrate how to analyse data in R.
+The topics touched on this collection span univariate data analysis, multivariate data analysis, and fundamentals of machine learning.</p>" />
+  <meta name="github-repo" content="eddiecg/Data-analysis-in-R" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 2 Univariate Data Analysis | Fundamentals of Data Analysis in R" />
+  
+  <meta name="twitter:description" content="<p>This is a collection of tutorials that illustrate how to analyse data in R.
+The topics touched on this collection span univariate data analysis, multivariate data analysis, and fundamentals of machine learning.</p>" />
+  
+
+<meta name="author" content="Eddie Cano-Gamez" />
+
+
+<meta name="date" content="2022-08-15" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="introduction-to-programming-in-r.html"/>
+<link rel="next" href="bivariate-data-analysis.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Fundamentals of Data Analysis in R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="introduction-to-programming-in-r.html"><a href="introduction-to-programming-in-r.html"><i class="fa fa-check"></i><b>1</b> Introduction to Programming in R</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="introduction-to-programming-in-r.html"><a href="introduction-to-programming-in-r.html#calculations-in-r"><i class="fa fa-check"></i><b>1.1</b> Calculations in R</a></li>
+<li class="chapter" data-level="1.2" data-path="introduction-to-programming-in-r.html"><a href="introduction-to-programming-in-r.html#variable-assignation-in-r"><i class="fa fa-check"></i><b>1.2</b> Variable assignation in R</a></li>
+<li class="chapter" data-level="1.3" data-path="introduction-to-programming-in-r.html"><a href="introduction-to-programming-in-r.html#data-types-in-r"><i class="fa fa-check"></i><b>1.3</b> Data types in R</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="introduction-to-programming-in-r.html"><a href="introduction-to-programming-in-r.html#numeric-variables"><i class="fa fa-check"></i><b>1.3.1</b> Numeric variables</a></li>
+<li class="chapter" data-level="1.3.2" data-path="introduction-to-programming-in-r.html"><a href="introduction-to-programming-in-r.html#character-variables"><i class="fa fa-check"></i><b>1.3.2</b> Character variables</a></li>
+<li class="chapter" data-level="1.3.3" data-path="introduction-to-programming-in-r.html"><a href="introduction-to-programming-in-r.html#logical-variables"><i class="fa fa-check"></i><b>1.3.3</b> Logical variables</a></li>
+<li class="chapter" data-level="1.3.4" data-path="introduction-to-programming-in-r.html"><a href="introduction-to-programming-in-r.html#categorical-variables-factors"><i class="fa fa-check"></i><b>1.3.4</b> Categorical variables (factors)</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="introduction-to-programming-in-r.html"><a href="introduction-to-programming-in-r.html#working-with-multiple-numbers-in-r"><i class="fa fa-check"></i><b>1.4</b> Working with multiple numbers in R</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="introduction-to-programming-in-r.html"><a href="introduction-to-programming-in-r.html#vectors"><i class="fa fa-check"></i><b>1.4.1</b> Vectors</a></li>
+<li class="chapter" data-level="1.4.2" data-path="introduction-to-programming-in-r.html"><a href="introduction-to-programming-in-r.html#lists"><i class="fa fa-check"></i><b>1.4.2</b> Lists</a></li>
+<li class="chapter" data-level="1.4.3" data-path="introduction-to-programming-in-r.html"><a href="introduction-to-programming-in-r.html#matrices"><i class="fa fa-check"></i><b>1.4.3</b> Matrices</a></li>
+<li class="chapter" data-level="1.4.4" data-path="introduction-to-programming-in-r.html"><a href="introduction-to-programming-in-r.html#data-frames"><i class="fa fa-check"></i><b>1.4.4</b> Data frames</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="introduction-to-programming-in-r.html"><a href="introduction-to-programming-in-r.html#manipulating-data-in-r"><i class="fa fa-check"></i><b>1.5</b> Manipulating data in R</a>
+<ul>
+<li class="chapter" data-level="1.5.1" data-path="introduction-to-programming-in-r.html"><a href="introduction-to-programming-in-r.html#working-with-lists-of-data-frames"><i class="fa fa-check"></i><b>1.5.1</b> Working with lists of data frames</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="introduction-to-programming-in-r.html"><a href="introduction-to-programming-in-r.html#extending-rs-funcitonality-with-libraries"><i class="fa fa-check"></i><b>1.6</b> Extending R’s funcitonality with libraries</a></li>
+<li class="chapter" data-level="1.7" data-path="introduction-to-programming-in-r.html"><a href="introduction-to-programming-in-r.html#writing-data-from-r"><i class="fa fa-check"></i><b>1.7</b> Writing data from R</a>
+<ul>
+<li class="chapter" data-level="1.7.1" data-path="introduction-to-programming-in-r.html"><a href="introduction-to-programming-in-r.html#writing-human-readable-files"><i class="fa fa-check"></i><b>1.7.1</b> Writing human readable files</a></li>
+<li class="chapter" data-level="1.7.2" data-path="introduction-to-programming-in-r.html"><a href="introduction-to-programming-in-r.html#writing-binary-files"><i class="fa fa-check"></i><b>1.7.2</b> Writing binary files</a></li>
+</ul></li>
+<li class="chapter" data-level="1.8" data-path="introduction-to-programming-in-r.html"><a href="introduction-to-programming-in-r.html#reading-data-into-r"><i class="fa fa-check"></i><b>1.8</b> Reading data into R</a></li>
+<li class="chapter" data-level="1.9" data-path="introduction-to-programming-in-r.html"><a href="introduction-to-programming-in-r.html#project-work"><i class="fa fa-check"></i><b>1.9</b> Project work</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="univariate-data-analysis.html"><a href="univariate-data-analysis.html"><i class="fa fa-check"></i><b>2</b> Univariate Data Analysis</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="univariate-data-analysis.html"><a href="univariate-data-analysis.html#visualising-univariate-data"><i class="fa fa-check"></i><b>2.1</b> Visualising univariate data</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="univariate-data-analysis.html"><a href="univariate-data-analysis.html#dot-plot-strip-chart"><i class="fa fa-check"></i><b>2.1.1</b> Dot plot / Strip chart</a></li>
+<li class="chapter" data-level="2.1.2" data-path="univariate-data-analysis.html"><a href="univariate-data-analysis.html#histograms"><i class="fa fa-check"></i><b>2.1.2</b> Histograms</a></li>
+<li class="chapter" data-level="2.1.3" data-path="univariate-data-analysis.html"><a href="univariate-data-analysis.html#density-plot"><i class="fa fa-check"></i><b>2.1.3</b> Density plot</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="univariate-data-analysis.html"><a href="univariate-data-analysis.html#summarising-univariate-data"><i class="fa fa-check"></i><b>2.2</b> Summarising univariate data</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="univariate-data-analysis.html"><a href="univariate-data-analysis.html#mean"><i class="fa fa-check"></i><b>2.2.1</b> Mean</a></li>
+<li class="chapter" data-level="2.2.2" data-path="univariate-data-analysis.html"><a href="univariate-data-analysis.html#median"><i class="fa fa-check"></i><b>2.2.2</b> Median</a></li>
+<li class="chapter" data-level="2.2.3" data-path="univariate-data-analysis.html"><a href="univariate-data-analysis.html#quantiles"><i class="fa fa-check"></i><b>2.2.3</b> Quantiles</a></li>
+<li class="chapter" data-level="2.2.4" data-path="univariate-data-analysis.html"><a href="univariate-data-analysis.html#standard-deviation"><i class="fa fa-check"></i><b>2.2.4</b> Standard deviation</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="univariate-data-analysis.html"><a href="univariate-data-analysis.html#comparing-data-to-probability-distributions"><i class="fa fa-check"></i><b>2.3</b> Comparing data to probability distributions</a></li>
+<li class="chapter" data-level="2.4" data-path="univariate-data-analysis.html"><a href="univariate-data-analysis.html#box-plots"><i class="fa fa-check"></i><b>2.4</b> Box plots</a></li>
+<li class="chapter" data-level="2.5" data-path="univariate-data-analysis.html"><a href="univariate-data-analysis.html#data-as-a-random-sample"><i class="fa fa-check"></i><b>2.5</b> Data as a random sample</a></li>
+<li class="chapter" data-level="2.6" data-path="univariate-data-analysis.html"><a href="univariate-data-analysis.html#exercises"><i class="fa fa-check"></i><b>2.6</b> Exercises</a></li>
+<li class="chapter" data-level="2.7" data-path="univariate-data-analysis.html"><a href="univariate-data-analysis.html#references"><i class="fa fa-check"></i><b>2.7</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="bivariate-data-analysis.html"><a href="bivariate-data-analysis.html"><i class="fa fa-check"></i><b>3</b> Bivariate Data Analysis</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="bivariate-data-analysis.html"><a href="bivariate-data-analysis.html#visualising-two-variables"><i class="fa fa-check"></i><b>3.1</b> Visualising two variables</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="bivariate-data-analysis.html"><a href="bivariate-data-analysis.html#scatter-plot"><i class="fa fa-check"></i><b>3.1.1</b> Scatter plot</a></li>
+<li class="chapter" data-level="3.1.2" data-path="bivariate-data-analysis.html"><a href="bivariate-data-analysis.html#bivariate-box-plots"><i class="fa fa-check"></i><b>3.1.2</b> Bivariate box plots</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="bivariate-data-analysis.html"><a href="bivariate-data-analysis.html#applying-transformations-to-a-variable"><i class="fa fa-check"></i><b>3.2</b> Applying transformations to a variable</a></li>
+<li class="chapter" data-level="3.3" data-path="bivariate-data-analysis.html"><a href="bivariate-data-analysis.html#using-ggplot2-to-create-personalised-plots"><i class="fa fa-check"></i><b>3.3</b> Using ggplot2 to create personalised plots</a></li>
+<li class="chapter" data-level="3.4" data-path="bivariate-data-analysis.html"><a href="bivariate-data-analysis.html#exercises-1"><i class="fa fa-check"></i><b>3.4</b> Exercises</a></li>
+<li class="chapter" data-level="3.5" data-path="bivariate-data-analysis.html"><a href="bivariate-data-analysis.html#covariance"><i class="fa fa-check"></i><b>3.5</b> Covariance</a></li>
+<li class="chapter" data-level="3.6" data-path="bivariate-data-analysis.html"><a href="bivariate-data-analysis.html#correlation"><i class="fa fa-check"></i><b>3.6</b> Correlation</a></li>
+<li class="chapter" data-level="3.7" data-path="bivariate-data-analysis.html"><a href="bivariate-data-analysis.html#predictions-and-linear-models"><i class="fa fa-check"></i><b>3.7</b> Predictions and linear models</a></li>
+<li class="chapter" data-level="3.8" data-path="bivariate-data-analysis.html"><a href="bivariate-data-analysis.html#correlation-does-not-equal-causation"><i class="fa fa-check"></i><b>3.8</b> Correlation does not equal causation</a></li>
+<li class="chapter" data-level="3.9" data-path="bivariate-data-analysis.html"><a href="bivariate-data-analysis.html#exercises-2"><i class="fa fa-check"></i><b>3.9</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="multivariate-data-analysis.html"><a href="multivariate-data-analysis.html"><i class="fa fa-check"></i><b>4</b> Multivariate Data Analysis</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="multivariate-data-analysis.html"><a href="multivariate-data-analysis.html#exploring-one-variable-at-a-time"><i class="fa fa-check"></i><b>4.1</b> Exploring one variable at a time</a></li>
+<li class="chapter" data-level="4.2" data-path="multivariate-data-analysis.html"><a href="multivariate-data-analysis.html#analysing-all-variables-jointly"><i class="fa fa-check"></i><b>4.2</b> Analysing all variables jointly</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="multivariate-data-analysis.html"><a href="multivariate-data-analysis.html#scatter-plot-matrices"><i class="fa fa-check"></i><b>4.2.1</b> Scatter plot matrices</a></li>
+<li class="chapter" data-level="4.2.2" data-path="multivariate-data-analysis.html"><a href="multivariate-data-analysis.html#correlation-plots"><i class="fa fa-check"></i><b>4.2.2</b> Correlation plots</a></li>
+<li class="chapter" data-level="4.2.3" data-path="multivariate-data-analysis.html"><a href="multivariate-data-analysis.html#the-distance-matrix"><i class="fa fa-check"></i><b>4.2.3</b> The distance matrix</a></li>
+<li class="chapter" data-level="4.2.4" data-path="multivariate-data-analysis.html"><a href="multivariate-data-analysis.html#clustering-and-dendrograms"><i class="fa fa-check"></i><b>4.2.4</b> Clustering and dendrograms</a></li>
+<li class="chapter" data-level="4.2.5" data-path="multivariate-data-analysis.html"><a href="multivariate-data-analysis.html#heatmaps"><i class="fa fa-check"></i><b>4.2.5</b> Heatmaps</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="multivariate-data-analysis.html"><a href="multivariate-data-analysis.html#exercises-3"><i class="fa fa-check"></i><b>4.3</b> Exercises</a></li>
+<li class="chapter" data-level="4.4" data-path="multivariate-data-analysis.html"><a href="multivariate-data-analysis.html#reducing-the-number-of-dimensions"><i class="fa fa-check"></i><b>4.4</b> Reducing the number of dimensions</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="multivariate-data-analysis.html"><a href="multivariate-data-analysis.html#combining-dimensionality-reduction-with-clustering"><i class="fa fa-check"></i><b>4.4.1</b> Combining dimensionality reduction with clustering</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="multivariate-data-analysis.html"><a href="multivariate-data-analysis.html#exercises-4"><i class="fa fa-check"></i><b>4.5</b> Exercises</a></li>
+<li class="chapter" data-level="4.6" data-path="multivariate-data-analysis.html"><a href="multivariate-data-analysis.html#references-1"><i class="fa fa-check"></i><b>4.6</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="web-scraping-in-r.html"><a href="web-scraping-in-r.html"><i class="fa fa-check"></i><b>5</b> Web scraping in R</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="web-scraping-in-r.html"><a href="web-scraping-in-r.html#example-scraping-the-imdb-website"><i class="fa fa-check"></i><b>5.1</b> Example: Scraping the IMDB website</a></li>
+<li class="chapter" data-level="5.2" data-path="web-scraping-in-r.html"><a href="web-scraping-in-r.html#extracting-variables-using-css-selectors"><i class="fa fa-check"></i><b>5.2</b> Extracting variables using CSS selectors</a></li>
+<li class="chapter" data-level="5.3" data-path="web-scraping-in-r.html"><a href="web-scraping-in-r.html#scraping-multiple-fields-from-a-website"><i class="fa fa-check"></i><b>5.3</b> Scraping multiple fields from a website</a></li>
+<li class="chapter" data-level="5.4" data-path="web-scraping-in-r.html"><a href="web-scraping-in-r.html#performing-exploratory-data-analysis-eda-on-scraped-data"><i class="fa fa-check"></i><b>5.4</b> Performing exploratory data analysis (EDA) on scraped data</a></li>
+<li class="chapter" data-level="5.5" data-path="web-scraping-in-r.html"><a href="web-scraping-in-r.html#exercises-5"><i class="fa fa-check"></i><b>5.5</b> Exercises</a></li>
+<li class="chapter" data-level="5.6" data-path="web-scraping-in-r.html"><a href="web-scraping-in-r.html#references-2"><i class="fa fa-check"></i><b>5.6</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="machine-learning-fundamentals-spam-detection-using-a-naive-bayes-classifier.html"><a href="machine-learning-fundamentals-spam-detection-using-a-naive-bayes-classifier.html"><i class="fa fa-check"></i><b>6</b> Machine Learning Fundamentals: Spam Detection Using a Naive Bayes Classifier</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="machine-learning-fundamentals-spam-detection-using-a-naive-bayes-classifier.html"><a href="machine-learning-fundamentals-spam-detection-using-a-naive-bayes-classifier.html#visualising-data"><i class="fa fa-check"></i><b>6.1</b> Visualising data</a></li>
+<li class="chapter" data-level="6.2" data-path="machine-learning-fundamentals-spam-detection-using-a-naive-bayes-classifier.html"><a href="machine-learning-fundamentals-spam-detection-using-a-naive-bayes-classifier.html#pre-processing-data"><i class="fa fa-check"></i><b>6.2</b> Pre-processing data</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="machine-learning-fundamentals-spam-detection-using-a-naive-bayes-classifier.html"><a href="machine-learning-fundamentals-spam-detection-using-a-naive-bayes-classifier.html#converting-data-to-corpus"><i class="fa fa-check"></i><b>6.2.1</b> Converting data to corpus</a></li>
+<li class="chapter" data-level="6.2.2" data-path="machine-learning-fundamentals-spam-detection-using-a-naive-bayes-classifier.html"><a href="machine-learning-fundamentals-spam-detection-using-a-naive-bayes-classifier.html#cleaning-data"><i class="fa fa-check"></i><b>6.2.2</b> Cleaning data</a></li>
+<li class="chapter" data-level="6.2.3" data-path="machine-learning-fundamentals-spam-detection-using-a-naive-bayes-classifier.html"><a href="machine-learning-fundamentals-spam-detection-using-a-naive-bayes-classifier.html#visualising-clean-data"><i class="fa fa-check"></i><b>6.2.3</b> Visualising clean data</a></li>
+<li class="chapter" data-level="6.2.4" data-path="machine-learning-fundamentals-spam-detection-using-a-naive-bayes-classifier.html"><a href="machine-learning-fundamentals-spam-detection-using-a-naive-bayes-classifier.html#tokenising"><i class="fa fa-check"></i><b>6.2.4</b> Tokenising</a></li>
+<li class="chapter" data-level="6.2.5" data-path="machine-learning-fundamentals-spam-detection-using-a-naive-bayes-classifier.html"><a href="machine-learning-fundamentals-spam-detection-using-a-naive-bayes-classifier.html#dividing-data-into-training-and-testing-set"><i class="fa fa-check"></i><b>6.2.5</b> Dividing data into training and testing set</a></li>
+<li class="chapter" data-level="6.2.6" data-path="machine-learning-fundamentals-spam-detection-using-a-naive-bayes-classifier.html"><a href="machine-learning-fundamentals-spam-detection-using-a-naive-bayes-classifier.html#correcting-data-sparsity"><i class="fa fa-check"></i><b>6.2.6</b> Correcting data sparsity</a></li>
+<li class="chapter" data-level="6.2.7" data-path="machine-learning-fundamentals-spam-detection-using-a-naive-bayes-classifier.html"><a href="machine-learning-fundamentals-spam-detection-using-a-naive-bayes-classifier.html#converting-data-to-word-appearance-table"><i class="fa fa-check"></i><b>6.2.7</b> Converting data to word appearance table</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="machine-learning-fundamentals-spam-detection-using-a-naive-bayes-classifier.html"><a href="machine-learning-fundamentals-spam-detection-using-a-naive-bayes-classifier.html#predicting-spam-and-non-spam"><i class="fa fa-check"></i><b>6.3</b> Predicting spam and non-spam</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="machine-learning-fundamentals-spam-detection-using-a-naive-bayes-classifier.html"><a href="machine-learning-fundamentals-spam-detection-using-a-naive-bayes-classifier.html#training-classifier"><i class="fa fa-check"></i><b>6.3.1</b> Training classifier</a></li>
+<li class="chapter" data-level="6.3.2" data-path="machine-learning-fundamentals-spam-detection-using-a-naive-bayes-classifier.html"><a href="machine-learning-fundamentals-spam-detection-using-a-naive-bayes-classifier.html#testing-classifier"><i class="fa fa-check"></i><b>6.3.2</b> Testing classifier</a></li>
+<li class="chapter" data-level="6.3.3" data-path="machine-learning-fundamentals-spam-detection-using-a-naive-bayes-classifier.html"><a href="machine-learning-fundamentals-spam-detection-using-a-naive-bayes-classifier.html#evaluating-performance"><i class="fa fa-check"></i><b>6.3.3</b> Evaluating performance</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="machine-learning-fundamentals-spam-detection-using-a-naive-bayes-classifier.html"><a href="machine-learning-fundamentals-spam-detection-using-a-naive-bayes-classifier.html#discussion"><i class="fa fa-check"></i><b>6.4</b> Discussion</a></li>
+<li class="chapter" data-level="6.5" data-path="machine-learning-fundamentals-spam-detection-using-a-naive-bayes-classifier.html"><a href="machine-learning-fundamentals-spam-detection-using-a-naive-bayes-classifier.html#references-3"><i class="fa fa-check"></i><b>6.5</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="machine-learning-fundamentals-predicting-variables-using-neural-networks.html"><a href="machine-learning-fundamentals-predicting-variables-using-neural-networks.html"><i class="fa fa-check"></i><b>7</b> Machine Learning Fundamentals: Predicting Variables Using Neural Networks</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="machine-learning-fundamentals-predicting-variables-using-neural-networks.html"><a href="machine-learning-fundamentals-predicting-variables-using-neural-networks.html#normalising-data"><i class="fa fa-check"></i><b>7.1</b> Normalising data</a></li>
+<li class="chapter" data-level="7.2" data-path="machine-learning-fundamentals-predicting-variables-using-neural-networks.html"><a href="machine-learning-fundamentals-predicting-variables-using-neural-networks.html#visualising-data-1"><i class="fa fa-check"></i><b>7.2</b> Visualising data</a></li>
+<li class="chapter" data-level="7.3" data-path="machine-learning-fundamentals-predicting-variables-using-neural-networks.html"><a href="machine-learning-fundamentals-predicting-variables-using-neural-networks.html#creating-neural-network"><i class="fa fa-check"></i><b>7.3</b> Creating neural network</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="machine-learning-fundamentals-predicting-variables-using-neural-networks.html"><a href="machine-learning-fundamentals-predicting-variables-using-neural-networks.html#spliting-data-into-training-and-testing-sets"><i class="fa fa-check"></i><b>7.3.1</b> Spliting data into training and testing sets</a></li>
+<li class="chapter" data-level="7.3.2" data-path="machine-learning-fundamentals-predicting-variables-using-neural-networks.html"><a href="machine-learning-fundamentals-predicting-variables-using-neural-networks.html#training-neural-network"><i class="fa fa-check"></i><b>7.3.2</b> Training neural network</a></li>
+<li class="chapter" data-level="7.3.3" data-path="machine-learning-fundamentals-predicting-variables-using-neural-networks.html"><a href="machine-learning-fundamentals-predicting-variables-using-neural-networks.html#testing-neural-network"><i class="fa fa-check"></i><b>7.3.3</b> Testing neural network</a></li>
+<li class="chapter" data-level="7.3.4" data-path="machine-learning-fundamentals-predicting-variables-using-neural-networks.html"><a href="machine-learning-fundamentals-predicting-variables-using-neural-networks.html#evaluating-performance-1"><i class="fa fa-check"></i><b>7.3.4</b> Evaluating performance</a></li>
+<li class="chapter" data-level="7.3.5" data-path="machine-learning-fundamentals-predicting-variables-using-neural-networks.html"><a href="machine-learning-fundamentals-predicting-variables-using-neural-networks.html#improving-performance-by-adding-hidden-nodes"><i class="fa fa-check"></i><b>7.3.5</b> Improving performance by adding hidden nodes</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="machine-learning-fundamentals-predicting-variables-using-neural-networks.html"><a href="machine-learning-fundamentals-predicting-variables-using-neural-networks.html#conclusions"><i class="fa fa-check"></i><b>7.4</b> Conclusions</a></li>
+<li class="chapter" data-level="7.5" data-path="machine-learning-fundamentals-predicting-variables-using-neural-networks.html"><a href="machine-learning-fundamentals-predicting-variables-using-neural-networks.html#references-4"><i class="fa fa-check"></i><b>7.5</b> References</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Fundamentals of Data Analysis in R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="univariate-data-analysis" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">Chapter 2</span> Univariate Data Analysis<a href="univariate-data-analysis.html#univariate-data-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>In order to study big data, we first have to learn how to analyse the simplest type of information: univariate data. The word “univarite” refers to a set of information which contains only one variable. For example, a school database with grades for all students can be seen as univariate, because there is only one variable of interest: grades. Two or more variables can be put together to form bivariate or multivariate data. This will be the topic of future sessions.</p>
+<p>In this example code, we will be working with the results of a study done in the 1970s. In this study, researchers assessed the levels of pollution accross multiple cities in the US by measuring the average annual temperature, number of manufacturing enterprises, population size, wind speed, annual precipitation and levels of the pollutant sulfur dioxide (SO2). Because it contains all of these pieces of information, this data set is multivariate. However, for now we will only focus on one of those variables: the average annual temperature.</p>
+<p>Let’s start by loading the example data set. To access it you will have to install the R package “HSAUR2”. You can do this by running the following line, remember to make sure you are connected to the internet.</p>
+<div class="sourceCode" id="cb209"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb209-1"><a href="univariate-data-analysis.html#cb209-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;HSAUR2&quot;</span>)</span></code></pre></div>
+<p>Now that the installation has completed, you can load the package with the following line.</p>
+<div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb210-1"><a href="univariate-data-analysis.html#cb210-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(HSAUR2)</span></code></pre></div>
+<p>We are ready to start. Loading the HSAUR2 package will add a series of variables to R. One of those is “USairpollution”, which contains our example data. Let’s assign this data frame to the variable “dat” (dat standing for data).</p>
+<div class="sourceCode" id="cb211"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb211-1"><a href="univariate-data-analysis.html#cb211-1" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> USairpollution</span></code></pre></div>
+<p>You can use head() to look at the first 6 lines of the table. Note how each of the rows is named after a US city, and each column contains a different piece of information for each city: sulfur dioxide levels, number of manufacturing enterpreises, population size, etc…</p>
+<div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb212-1"><a href="univariate-data-analysis.html#cb212-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dat)</span></code></pre></div>
+<pre><code>##             SO2 temp manu popul wind precip predays
+## Albany       46 47.6   44   116  8.8  33.36     135
+## Albuquerque  11 56.8   46   244  8.9   7.77      58
+## Atlanta      24 61.5  368   497  9.1  48.34     115
+## Baltimore    47 55.0  625   905  9.6  41.31     111
+## Buffalo      11 47.1  391   463 12.4  36.11     166
+## Charleston   31 55.2   35    71  6.5  40.75     148</code></pre>
+<p>If you want to know how many cities and how many different variables are in this table, use the function dim() as follows.</p>
+<div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb214-1"><a href="univariate-data-analysis.html#cb214-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(dat)</span></code></pre></div>
+<pre><code>## [1] 41  7</code></pre>
+<p>Our table contains 7 variables for 41 different US cities.</p>
+<p>Let’s extract only the “temperature” variable and assign it to a new variable called temps (temps for temperatures).</p>
+<div class="sourceCode" id="cb216"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb216-1"><a href="univariate-data-analysis.html#cb216-1" aria-hidden="true" tabindex="-1"></a>temps <span class="ot">&lt;-</span> dat<span class="sc">$</span>temp</span></code></pre></div>
+<div id="visualising-univariate-data" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> Visualising univariate data<a href="univariate-data-analysis.html#visualising-univariate-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We must always look at the data we have before doing any analysis with it. This is because sometimes data sets contain errors, outliers or missing values, and visually inspecting them reveals all of these issues Furthermore, some patterns can be very clear to the human eye and will suggest us what we have to do next.</p>
+<p>There are several methods for representing univariate data visually. Let’s look at a few of them.</p>
+<div id="dot-plot-strip-chart" class="section level3 hasAnchor" number="2.1.1">
+<h3><span class="header-section-number">2.1.1</span> Dot plot / Strip chart<a href="univariate-data-analysis.html#dot-plot-strip-chart" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Each of the cities has its own particular temperature. How to get an idea of how hot or cold they are? The easiest way to do this is by ordering the cities from coldest to hottest and then adding them one after another in a line. This type of graph is called a “dot plot” (because each number is usually represented by a dot) or “strip chart”.</p>
+<p>To create a strip chart in R, simply use the stripchart() function, specifying the name of your data frame:</p>
+<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb217-1"><a href="univariate-data-analysis.html#cb217-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stripchart</span>(temps)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-113-1.png" width="672" /></p>
+<p>This is a good start, but the plot has no title and the axes have no names. This is really bad practice! We can add titles via the argument “main” and label the X and Y axes using the arguments “xlab” and “ylab”.</p>
+<p>Let’s also change the squares into dots, which are more commonly used. To do that let’s set the argument “pch” to 19. “pch” stands for “Plotting Character”, and tells R which figure to use for each of the elements in our graph. Each number correspond to a different figure and you can use anything from triangles and rectangles to crosses and dots.</p>
+<p>Let’s also add “stack” in the method argument. This tells R that, if two cities have very similar temperatures, they should be stacked one on top of the other. In this way we know that multiple cities fall in the same range.</p>
+<div class="sourceCode" id="cb218"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb218-1"><a href="univariate-data-analysis.html#cb218-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stripchart</span>(temps, <span class="at">method =</span> <span class="st">&quot;stack&quot;</span>, <span class="at">pch=</span><span class="dv">19</span>, <span class="at">main=</span><span class="st">&quot;Temperature of US cities&quot;</span>, <span class="at">xlab=</span><span class="st">&quot;Temperature (ºF)&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-114-1.png" width="672" /></p>
+</div>
+<div id="histograms" class="section level3 hasAnchor" number="2.1.2">
+<h3><span class="header-section-number">2.1.2</span> Histograms<a href="univariate-data-analysis.html#histograms" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>But sometimes having dots ordered by value is not enough, because it doesn’t tell us anything quantitative about the data. It is more common to use histograms. To create a histogram, we divide the range of temperatures in equal intervals (sometimes called “bins”) and count how many cities fall in each bin. We then create bars, and the height of each bar reflects the number of cities with temperature in that range.</p>
+<p>To create a histogram in R simply use the funciton hist()</p>
+<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb219-1"><a href="univariate-data-analysis.html#cb219-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(temps, <span class="at">main=</span><span class="st">&quot;Temperature of US cities&quot;</span>, <span class="at">xlab=</span><span class="st">&quot;Temperature (ºF)&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-115-1.png" width="672" /></p>
+<p>However, sometimes even this is not accurate enough. For example, now we know there are 13 cities with temperature between 50 and 55 ºF, but how big actually is this number? If we only had information for 15 cities it would be huge, but if we had information for 100 it would be pretty small. For this reason, sometimes it is better to use “percentage (proportion) of cities” and not number of cities. To do this in R, set the frequency argument (“freq”) to FALSE.</p>
+<div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb220-1"><a href="univariate-data-analysis.html#cb220-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(temps, <span class="at">freq =</span> <span class="cn">FALSE</span>, <span class="at">main=</span><span class="st">&quot;Temperature of US cities&quot;</span>, <span class="at">xlab=</span><span class="st">&quot;Temperature (ºF)&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-116-1.png" width="672" /></p>
+<p>Note how the y axis has changed! Now we know that 7% of the cities we have information for have a temperature of 50 to 55 ºF.</p>
+<p>You can also increase the numebr of bars (or, to be precise, the number of bins) using the “breaks” argument. For example, setting breaks=20 will cause R to plot approximately 20 bars in the histogram.</p>
+<div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb221-1"><a href="univariate-data-analysis.html#cb221-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(temps, <span class="at">freq=</span><span class="cn">FALSE</span>, <span class="at">main=</span><span class="st">&quot;Temperature of US cities&quot;</span>, <span class="at">xlab=</span><span class="st">&quot;Temperature (ºF)&quot;</span>, <span class="at">breaks=</span><span class="dv">20</span>, <span class="at">col=</span><span class="st">&quot;grey&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-117-1.png" width="672" /></p>
+<p>This allows us to have more detailed information on the data (we call this “granularity”). For example, we can now see that there are 4 or 5 cities with unusually high temperatures. These might be outliers. Notice how we also changed the colour of the bars to grey using the argument “col” (col for color).</p>
+</div>
+<div id="density-plot" class="section level3 hasAnchor" number="2.1.3">
+<h3><span class="header-section-number">2.1.3</span> Density plot<a href="univariate-data-analysis.html#density-plot" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Sometimes drawing bars might not be the best option. We can create an approximate “line” which represents the same information using the function density(). Density() does more than simply creating a line! It is actually creating tiny “sliding bins” and estimating the value for each of them, then joining the values by lines. The way these values are estimated is by using “kernels”. Dernels and densities are extremely important when dealing with multivariate data.</p>
+<p>A plot created in such a way is called a “density plot”. To create one in R, simply use density() followed by plot() as follows:</p>
+<div class="sourceCode" id="cb222"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb222-1"><a href="univariate-data-analysis.html#cb222-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(temps), <span class="at">main=</span><span class="st">&quot;Temperature of US cities&quot;</span>, <span class="at">xlab=</span><span class="st">&quot;Temperature (ºF)&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-118-1.png" width="672" /></p>
+<p>This density plot reveals, again, a few cities which are unusually hot.</p>
+<p>Let’s change the color of the density plot to blue.</p>
+<div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb223-1"><a href="univariate-data-analysis.html#cb223-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(temps), <span class="at">main=</span><span class="st">&quot;Temperature of US cities&quot;</span>, <span class="at">xlab=</span><span class="st">&quot;Temperature (ºF)&quot;</span>, <span class="at">col=</span><span class="st">&quot;blue&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-119-1.png" width="672" /></p>
+<p>Now that we’ve seen the temperature data with our own eyes, let’s look at more formal ways to get useful information out of it.</p>
+</div>
+</div>
+<div id="summarising-univariate-data" class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> Summarising univariate data<a href="univariate-data-analysis.html#summarising-univariate-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Perhaps the most question to ask with a data set like this one is the following: “What is the most common temperature?” or, in other words, “How hot or cold are MOST cities?”</p>
+<div id="mean" class="section level3 hasAnchor" number="2.2.1">
+<h3><span class="header-section-number">2.2.1</span> Mean<a href="univariate-data-analysis.html#mean" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>To answer this we can calculate a simple average. The way to do this in R is via the mean() function.</p>
+<div class="sourceCode" id="cb224"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb224-1"><a href="univariate-data-analysis.html#cb224-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(temps)</span></code></pre></div>
+<pre><code>## [1] 55.76341</code></pre>
+<p>This tells us most US cities have a temperature close to 56ºF. Let’s see how this agrees with out visual inspection of the data. We can create a density plot and add a vertical line indicating the mean. To add vertical (or horizontal) lines, we use the function abline(), the v arguments tells R we want a vertical line.</p>
+<div class="sourceCode" id="cb226"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb226-1"><a href="univariate-data-analysis.html#cb226-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(temps), <span class="at">main=</span><span class="st">&quot;Temperature of US cities&quot;</span>, <span class="at">xlab=</span><span class="st">&quot;Temperature (ºF)&quot;</span>)</span>
+<span id="cb226-2"><a href="univariate-data-analysis.html#cb226-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="fu">mean</span>(temps))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-121-1.png" width="672" /></p>
+<p>The mean temperature is indeed very close to the interval where most cities fall. However, it does not align with the most common value (the highest point of our density plot). Why is this? One possibility is that the unusually hot cities are causing this mean to be too high. We call this “skewing” the mean.</p>
+</div>
+<div id="median" class="section level3 hasAnchor" number="2.2.2">
+<h3><span class="header-section-number">2.2.2</span> Median<a href="univariate-data-analysis.html#median" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Another way of answering this same question is by ordering all the cities from coldest to hottest and finding the one right in the middle of the series. What is the temperature of this “middle” city? We call this value the median. To calculate medians in R simply use the funciton median().</p>
+<div class="sourceCode" id="cb227"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb227-1"><a href="univariate-data-analysis.html#cb227-1" aria-hidden="true" tabindex="-1"></a><span class="fu">median</span>(temps)</span></code></pre></div>
+<pre><code>## [1] 54.6</code></pre>
+<p>Let’s now add both the mean and the median to the previous density plot. The mean will be a red line and the median a blue one.</p>
+<div class="sourceCode" id="cb229"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb229-1"><a href="univariate-data-analysis.html#cb229-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(temps), <span class="at">main=</span><span class="st">&quot;Temperature of US cities&quot;</span>, <span class="at">xlab=</span><span class="st">&quot;Temperature (ºF)&quot;</span>)</span>
+<span id="cb229-2"><a href="univariate-data-analysis.html#cb229-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="fu">mean</span>(temps), <span class="at">col=</span><span class="st">&quot;red&quot;</span>)</span>
+<span id="cb229-3"><a href="univariate-data-analysis.html#cb229-3" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="fu">median</span>(temps), <span class="at">col=</span><span class="st">&quot;blue&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-123-1.png" width="672" /></p>
+<p>The median is closer to the position where, according to our eyes, the most common temeprature should be. This is because the median, as opposed to the mean, is “robust”. This means that even if we have outliers (cities with very high or low temperatures), the median will remain almost the same.</p>
+<p>Let’s add the same lines to our first strip chart.</p>
+<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb230-1"><a href="univariate-data-analysis.html#cb230-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stripchart</span>(temps, <span class="at">main=</span><span class="st">&quot;Temperature of US cities&quot;</span>, <span class="at">xlab=</span><span class="st">&quot;Temperature (ºF)&quot;</span>, <span class="at">method =</span> <span class="st">&quot;stack&quot;</span>, <span class="at">pch=</span><span class="dv">19</span>)</span>
+<span id="cb230-2"><a href="univariate-data-analysis.html#cb230-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="fu">mean</span>(temps), <span class="at">col=</span><span class="st">&quot;red&quot;</span>)</span>
+<span id="cb230-3"><a href="univariate-data-analysis.html#cb230-3" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="fu">median</span>(temps), <span class="at">col=</span><span class="st">&quot;blue&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-124-1.png" width="672" /></p>
+</div>
+<div id="quantiles" class="section level3 hasAnchor" number="2.2.3">
+<h3><span class="header-section-number">2.2.3</span> Quantiles<a href="univariate-data-analysis.html#quantiles" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Sometimes we not only want to know what is the most common temperature, but also how many cities are cold, how many hot and how many not so cold but not so hot. To answer this question we could simply order the cities from coldest to hotest and then divide them in four groups: the first fourth (25%) are the coldest, the next fourth are the “kind of cold”” ones, next are the “kind of warm” cities, and the final fourth are the hotest. Then we can ask: what are the cutting points between these four groups? After which temperature do we no longer call a city cold but warm? We call these “cutting points” the quantiles of the data.</p>
+<p>To create these 5 quantiles, which divide the data in fourths, you can use the function quantile().</p>
+<div class="sourceCode" id="cb231"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb231-1"><a href="univariate-data-analysis.html#cb231-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(temps)</span></code></pre></div>
+<pre><code>##   0%  25%  50%  75% 100% 
+## 43.5 50.6 54.6 59.3 75.5</code></pre>
+<p>This tells us that the 25% coldest cities have temperatures below 43 ºF.</p>
+<p>If this sounds too abstract, then let’s visualise it. Let’s go back to our original strip chart and add 4 vertical lines, one for each quantile.</p>
+<div class="sourceCode" id="cb233"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb233-1"><a href="univariate-data-analysis.html#cb233-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stripchart</span>(temps, <span class="at">main=</span><span class="st">&quot;Temperature of US cities&quot;</span>, <span class="at">xlab=</span><span class="st">&quot;Temperature (ºF)&quot;</span>, <span class="at">method =</span> <span class="st">&quot;stack&quot;</span>, <span class="at">pch=</span><span class="dv">19</span>)</span>
+<span id="cb233-2"><a href="univariate-data-analysis.html#cb233-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="fu">quantile</span>(temps))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-126-1.png" width="672" /></p>
+<p>Notice how these quantiles divide the data in fourths. Because of this, in statistics they have a special name: quartiles. Another way to obtain the quartiles of a data set is by using the function summary().</p>
+<div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb234-1"><a href="univariate-data-analysis.html#cb234-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(temps)</span></code></pre></div>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   43.50   50.60   54.60   55.76   59.30   75.50</code></pre>
+<p>Notice how the middle quantile is the same as the median.</p>
+<p>But we don’t always have to divide our data in fourths. We can, for instance, divide it in tenths. To do this, we use the quantile() function and add a new argument called “probs” (probs for probabilities). We will set probs to be the series of numbers 0.1, 0.2, 0.3, etc… until we reach 1. This tells R we want the first 0-10% of the data, then the 10-20% and so on.</p>
+<div class="sourceCode" id="cb236"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb236-1"><a href="univariate-data-analysis.html#cb236-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(temps), <span class="at">main=</span><span class="st">&quot;Temperature of US cities&quot;</span>, <span class="at">xlab=</span><span class="st">&quot;Temperature (ºF)&quot;</span>)</span>
+<span id="cb236-2"><a href="univariate-data-analysis.html#cb236-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="fu">quantile</span>(temps, <span class="at">probs =</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.1</span>)))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-128-1.png" width="672" /></p>
+<p>We call these specific quantiles the “deciles”.</p>
+<p>Using the same procedure, we can divide the data in 100 tiny bins. We call the cutting points for this partition “percentiles”. Each of the bins created by this process will contain 1% of the data.</p>
+<div class="sourceCode" id="cb237"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb237-1"><a href="univariate-data-analysis.html#cb237-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(temps), <span class="at">main=</span><span class="st">&quot;Temperature of US cities&quot;</span>, <span class="at">xlab=</span><span class="st">&quot;Temperature (ºF)&quot;</span>)</span>
+<span id="cb237-2"><a href="univariate-data-analysis.html#cb237-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="fu">quantile</span>(temps, <span class="at">probs =</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.01</span>)))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-129-1.png" width="672" /></p>
+<p>However, notice that this is purely thoeretical. We do not actually have information for 100 cities, only for 41! R is thus estimating how these quantiles would be if we indeed had 100 cities or more. This becomes very obvious in our strip chart:</p>
+<div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb238-1"><a href="univariate-data-analysis.html#cb238-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stripchart</span>(temps, <span class="at">main=</span><span class="st">&quot;Temperature of US cities&quot;</span>, <span class="at">xlab=</span><span class="st">&quot;Temperature (ºF)&quot;</span>, <span class="at">method =</span> <span class="st">&quot;stack&quot;</span>, <span class="at">pch=</span><span class="dv">19</span>)</span>
+<span id="cb238-2"><a href="univariate-data-analysis.html#cb238-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="fu">quantile</span>(temps, <span class="at">probs =</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.01</span>)))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-130-1.png" width="672" /></p>
+<p>Notice how some of the bins do not contain any actual data points: if we increased our data size to 100 or 1000 cities we would expect these areas to start being filled up.</p>
+</div>
+<div id="standard-deviation" class="section level3 hasAnchor" number="2.2.4">
+<h3><span class="header-section-number">2.2.4</span> Standard deviation<a href="univariate-data-analysis.html#standard-deviation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Another question we can ask from this data is: “How different between each other are US cities in terms of temperature?”. We can think of this question as: “How different is the temperature of each US city to the average (mean) temperature?”</p>
+<p>This might seem like an abstract question, but we can visualise it. Let’s represent the temperature of each city as a dot, and the average as a vertical line (just like in our strip chart). How far is each dot from the line? This is represented here by dashed line segments. The question we are asking can be thought of as “how long are these lines usually?”</p>
+<div class="sourceCode" id="cb239"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb239-1"><a href="univariate-data-analysis.html#cb239-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x =</span> temps, <span class="at">y=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">41</span>, <span class="at">pch=</span><span class="dv">19</span>, <span class="at">main=</span><span class="st">&quot;Temperature of US cities&quot;</span>, <span class="at">xlab=</span><span class="st">&quot;Temperature (ºF)&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;&quot;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>)</span>
+<span id="cb239-2"><a href="univariate-data-analysis.html#cb239-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="fu">mean</span>(temps))</span>
+<span id="cb239-3"><a href="univariate-data-analysis.html#cb239-3" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="at">x0 =</span> temps, <span class="at">x1 =</span> <span class="fu">mean</span>(temps),<span class="at">y0=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">41</span>,<span class="at">y1=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">41</span>, <span class="at">lty=</span><span class="st">&quot;dotted&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-131-1.png" width="672" /></p>
+<p>To find these values, let’s substract the mean temperature from the temperature of each single city. We will assign this value to the variable “diffs”.</p>
+<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb240-1"><a href="univariate-data-analysis.html#cb240-1" aria-hidden="true" tabindex="-1"></a>diffs <span class="ot">&lt;-</span> temps <span class="sc">-</span> <span class="fu">mean</span>(temps)</span></code></pre></div>
+<p>Then, we can simply ask: how big are these differences on average? Let’s apply the mean function to them.</p>
+<div class="sourceCode" id="cb241"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb241-1"><a href="univariate-data-analysis.html#cb241-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(diffs)</span></code></pre></div>
+<pre><code>## [1] -2.166289e-15</code></pre>
+<p>We see that the number is extremely small! However, we can see in the plot above that this is not true: cities are sometimes very far from the average line. So what went wrong?</p>
+<p>If we look at the content of diffs we will see the problem right away: some of this differences are negative and some are possitive, and you cannot simply add positives and negatives. We are not interested in the difference being positive or negative (colder or hotter cities), we are just interested in how big it is.</p>
+<div class="sourceCode" id="cb243"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb243-1"><a href="univariate-data-analysis.html#cb243-1" aria-hidden="true" tabindex="-1"></a>diffs</span></code></pre></div>
+<pre><code>##  [1]  -8.1634146   1.0365854   5.7365854  -0.7634146  -8.6634146  -0.5634146  -5.1634146  -1.7634146  -6.0634146  -4.2634146  10.4365854  -3.8634146  -6.7634146  -5.8634146
+## [15]  -6.6634146  13.1365854  -3.4634146  12.6365854  -1.2634146   5.2365854  -0.1634146   5.8365854  19.7365854 -10.0634146 -12.2634146   3.6365854  12.5365854   3.5365854
+## [29]  -4.2634146  -1.1634146  14.5365854  -5.3634146  -5.7634146   2.0365854  -4.7634146   0.9365854  -4.6634146   0.1365854   1.5365854   0.8365854  -1.7634146</code></pre>
+<p>To solve this problem, we can square each of this numbers. This, because squares are always possitive, regardless of the sign of the original number. for instance 2^2 and (-2)^2 are both 4. Let’s do this and see if we can get rid of the negative sign.</p>
+<div class="sourceCode" id="cb245"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb245-1"><a href="univariate-data-analysis.html#cb245-1" aria-hidden="true" tabindex="-1"></a>diffs<span class="sc">^</span><span class="dv">2</span></span></code></pre></div>
+<pre><code>##  [1]  66.64133849   1.07450922  32.90841166   0.58280190  75.05475312   0.31743605  26.66085068   3.10963117  36.76499703  18.17670434 108.92231410  14.92597264  45.74377751
+## [14]  34.37963117  44.40109459 172.56987507  11.99524093 159.68328971   1.59621654  27.42182629   0.02670434  34.06572873 389.53280190 101.27231410 150.39133849  13.22475312
+## [27] 157.16597264  12.50743605  18.17670434   1.35353361 211.31231410  28.76621654  33.21694825   4.14767995  22.69011898   0.87719215  21.74743605   0.01865556   2.36109459
+## [40]   0.69987507   3.10963117</code></pre>
+<p>It seems to have worked. Now we can calcualte the average distance using mean. However, remember we applied a square, so now we have to revert it. We revert it using the opposite operation: a square root.</p>
+<div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb247-1"><a href="univariate-data-analysis.html#cb247-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">mean</span>(diffs<span class="sc">^</span><span class="dv">2</span>))</span></code></pre></div>
+<pre><code>## [1] 7.139029</code></pre>
+<p>This value (the average difference between any particular temperature and the average temperature) is called “standard deviation”. It is a measure of the “spread” of the data, which in common words means how different cities are to each other.</p>
+<p>We don’t have to go into the trouble of calculating all of these squares, means, and squared roots every time we want the standard deviation. R already has a function that does that for us called sd(). Let’s apply it to the data:</p>
+<div class="sourceCode" id="cb249"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb249-1"><a href="univariate-data-analysis.html#cb249-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(temps)</span></code></pre></div>
+<pre><code>## [1] 7.227716</code></pre>
+<p>Notice how it is almost the same number. The difference in decimal points is simply because of precision.</p>
+</div>
+</div>
+<div id="comparing-data-to-probability-distributions" class="section level2 hasAnchor" number="2.3">
+<h2><span class="header-section-number">2.3</span> Comparing data to probability distributions<a href="univariate-data-analysis.html#comparing-data-to-probability-distributions" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We might also be interested in how our observations are “distributed”. You can think of this as “what kind of shape does the histogram and density plots have?” Can we see one very frequent value, forming a bell shape? Or do we see two or three frequent values? If we see a bell shape, is it symmetric? Or is the right or left tail longer?</p>
+<p>But finding the distribution that describes a dataset is much more than simply knowing its “shape”: it is a deep statistical question that can help us understand how the data behaves. During the theoretical session that accompanies this exercise you will learn more about statistical distributions. Multiple of these exist such as the binomial, the Poisson, the gamma, the T (Student’s) and the normal distribution. For now, let’s focus only on the normal distribution.</p>
+<p>We say that data is normally distributed if it has a symmetric “bell shape” (the proper name for this shape is ‘Gaussian’, because Gauss was the mathematician who described it) with one very frequent value. We only need two numbers to define a normal distribution:</p>
+<ol style="list-style-type: upper-alpha">
+<li>the mean</li>
+<li>the standard deviation</li>
+</ol>
+<p>R allows us to very easily create random numbers from a normal distribution. For example, let’s use the mean and standard deviation we calculated before as the parameters of a normal distribution. Using them, let’s “simulate” 1000 data points. You can think of this as simulating in R data for 1000 US cities. Of course these cities do not exist, but in the computer they will behave as “the average US city”.</p>
+<p>To generate random numbers using the normal distribution in R, use the function rnorm() and specify how many random numbers you need, what is the mean and what is the standard deviation. We will assign these thousand random numbers to the variable “cities”.</p>
+<div class="sourceCode" id="cb251"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb251-1"><a href="univariate-data-analysis.html#cb251-1" aria-hidden="true" tabindex="-1"></a>cities <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">1000</span>, <span class="at">mean =</span> <span class="fu">mean</span>(temps), <span class="at">sd =</span> <span class="fu">sd</span>(temps))</span></code></pre></div>
+<p>Now, let’s create a histogram of such simulated temperatures.</p>
+<div class="sourceCode" id="cb252"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb252-1"><a href="univariate-data-analysis.html#cb252-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(cities, <span class="at">freq=</span><span class="cn">FALSE</span>, <span class="at">breaks=</span><span class="dv">50</span>, <span class="at">col=</span><span class="st">&quot;grey&quot;</span>, <span class="at">main=</span><span class="st">&quot;Simulated temperatures&quot;</span>, <span class="at">xlab=</span><span class="st">&quot;Temperature (ºF)&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-139-1.png" width="672" /></p>
+<p>We can see that they indeed form a symmetric bell shape around our mean.</p>
+<p>Now we are able to ask: “Is our real data on temperature of US cities normally distributed?” To answer this question, let’s put our simulated (theoretical) values and our real values together. Do they have the same properties? Do we see the same shape? We will plot the normal distribution in black and the real data in blue</p>
+<div class="sourceCode" id="cb253"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb253-1"><a href="univariate-data-analysis.html#cb253-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(temps), <span class="at">main=</span><span class="st">&quot;Simulated vs real temperatures&quot;</span>,<span class="at">xlab=</span><span class="st">&quot;Temperature (ºF)&quot;</span>, <span class="at">col=</span><span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb253-2"><a href="univariate-data-analysis.html#cb253-2" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">density</span>(cities))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-140-1.png" width="672" /></p>
+<p>You can already see that our real data, even though similar to the normal distribution, does not really have the same shape. There are a number of really hot cities that appear like a bump towards the right side of the plot.</p>
+<p>But evaluating this with our eyes is not rigorous enough! To make this a more formal test let’s do the following:</p>
+<ol style="list-style-type: decimal">
+<li>We create percentiles for our data, as we did above:</li>
+</ol>
+<div class="sourceCode" id="cb254"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb254-1"><a href="univariate-data-analysis.html#cb254-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(temps), <span class="at">main=</span><span class="st">&quot;Temperature of US cities&quot;</span>, <span class="at">xlab=</span><span class="st">&quot;Temperature (ºF)&quot;</span>)</span>
+<span id="cb254-2"><a href="univariate-data-analysis.html#cb254-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="fu">quantile</span>(temps, <span class="at">probs =</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.01</span>)))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-141-1.png" width="672" /></p>
+<ol start="2" style="list-style-type: decimal">
+<li>We do the same with the simulated (theoretical) data:</li>
+</ol>
+<div class="sourceCode" id="cb255"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb255-1"><a href="univariate-data-analysis.html#cb255-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(cities), <span class="at">main=</span><span class="st">&quot;Simulated temperatures&quot;</span>, <span class="at">xlab=</span><span class="st">&quot;Temperature (ºF)&quot;</span>)</span>
+<span id="cb255-2"><a href="univariate-data-analysis.html#cb255-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="fu">quantile</span>(temps, <span class="at">probs =</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.01</span>)))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-142-1.png" width="672" /></p>
+<p>Now all we have to do is compare both sets of quantiles. Are they the same? We can do this by plotting the theoretical against the real quantiles. If they are the same, they should follow a straight line. We call this a quantile-quantile plot, sometimes called a “QQ-plot”.</p>
+<p>There is a very easy way to do this in R. You can use the function qqnorm(), which will automatically create such a plot. You can even add a straight line to test if the points fall on it using qqline(). Note, however, that this function only works for normal distributions.</p>
+<div class="sourceCode" id="cb256"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb256-1"><a href="univariate-data-analysis.html#cb256-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(temps, <span class="at">main=</span><span class="st">&quot;Temperature of US cities&quot;</span>)</span>
+<span id="cb256-2"><a href="univariate-data-analysis.html#cb256-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(dat<span class="sc">$</span>tem)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-143-1.png" width="672" /></p>
+<p>Now we can see that, indeed, there are some outlier cities at the very top. However, the rest o the data does follow the line, so we can confidently say they are normally distributed!</p>
+</div>
+<div id="box-plots" class="section level2 hasAnchor" number="2.4">
+<h2><span class="header-section-number">2.4</span> Box plots<a href="univariate-data-analysis.html#box-plots" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Finally, let’s study one last type of graph: the box plot. The box plot is a very simple plot which summarises all of our data. It is a box which contains the central 50% of the data. This means that the limits of the box are the 1st and 3rd quartile. We also add a line inside the box representing the median and whiskers that extend to the upper and lower limits of the data. If there are any obvious outliers, they are plotted as tiny dots outside the plot.</p>
+<p>To create a boxplot in R, you can ue the boxplot() function as follows:</p>
+<div class="sourceCode" id="cb257"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb257-1"><a href="univariate-data-analysis.html#cb257-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(temps, <span class="at">main=</span><span class="st">&quot;Temperature of US cities&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;Temperature (ºF)&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-144-1.png" width="672" /></p>
+</div>
+<div id="data-as-a-random-sample" class="section level2 hasAnchor" number="2.5">
+<h2><span class="header-section-number">2.5</span> Data as a random sample<a href="univariate-data-analysis.html#data-as-a-random-sample" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>As discussed in the theoretical session, statistics consider any data set as a random sample. This means that, of all possible US cities at all possible times, we took a sample of 41 of them. But if we repeated this experiment again, we would get a different set of 41 temperatures. In fact, if we repeated it 100 times we would get 100 different sets of 41 values!</p>
+<p>Let’s simulate this in R. We have already created a “fictional” set of 1000 cities above. Let’s take a sample of 41 temperatures out of thsoe 1000 and calculate the mean. Let’s then repeat this 10 times. We will thus get 10 means.</p>
+<div class="sourceCode" id="cb258"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb258-1"><a href="univariate-data-analysis.html#cb258-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>){</span>
+<span id="cb258-2"><a href="univariate-data-analysis.html#cb258-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">mean</span>(<span class="fu">sample</span>(<span class="at">x =</span> cities, <span class="at">size =</span> <span class="dv">41</span>)))</span>
+<span id="cb258-3"><a href="univariate-data-analysis.html#cb258-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>## [1] 56.00563
+## [1] 56.33187
+## [1] 55.07881
+## [1] 56.11799
+## [1] 54.50222
+## [1] 54.5842
+## [1] 56.77567
+## [1] 56.05676
+## [1] 57.92634
+## [1] 53.68575</code></pre>
+<p>You can see that every mean is different to the other, but at the same time they are all kind of similar, and they are also similar to the mean in our real data (54.6).</p>
+<p>Let’s now repeat this 1000 times and create a histogram!</p>
+<div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb260-1"><a href="univariate-data-analysis.html#cb260-1" aria-hidden="true" tabindex="-1"></a>averages <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb260-2"><a href="univariate-data-analysis.html#cb260-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>){</span>
+<span id="cb260-3"><a href="univariate-data-analysis.html#cb260-3" aria-hidden="true" tabindex="-1"></a>  averages[i] <span class="ot">&lt;-</span> (<span class="fu">mean</span>(<span class="fu">sample</span>(<span class="at">x =</span> cities, <span class="at">size =</span> <span class="dv">41</span>)))</span>
+<span id="cb260-4"><a href="univariate-data-analysis.html#cb260-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb261-1"><a href="univariate-data-analysis.html#cb261-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(averages, <span class="at">breaks =</span> <span class="dv">20</span>, <span class="at">col=</span><span class="st">&quot;grey&quot;</span>, <span class="at">main=</span><span class="st">&quot;&quot;</span>, <span class="at">xlab=</span><span class="st">&quot;Average&quot;</span>)</span>
+<span id="cb261-2"><a href="univariate-data-analysis.html#cb261-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="fu">c</span>(<span class="fu">quantile</span>(averages, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.025</span>,<span class="fl">0.975</span>))))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-147-1.png" width="672" /></p>
+<p>Notice that I’ve added two vertical lines: 95% of the times our average (mean) is between these two lines. We call this a confidence interval. In this case, a 95% confidence interval. What this means is that, if the 1000 cities we simulated were real and if we repeatedly measured their temperatures, 95% of the times we would get an average between 53.16 and 57.45 ºF.</p>
+<div class="sourceCode" id="cb262"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb262-1"><a href="univariate-data-analysis.html#cb262-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(averages, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.025</span>,<span class="fl">0.975</span>))</span></code></pre></div>
+<pre><code>##     2.5%    97.5% 
+## 53.63041 58.09983</code></pre>
+<p>So from now on, every time you calculate an average, median or standard deviation remember that the value you get is only one of hundreds of possibilities. If you repeat the experiment you will get something different! We call this a “random variable”. Means and standard deviations are always random variables, and thus it is always a good idea to not only say their value, but also add a confidence interval.</p>
+</div>
+<div id="exercises" class="section level2 hasAnchor" number="2.6">
+<h2><span class="header-section-number">2.6</span> Exercises<a href="univariate-data-analysis.html#exercises" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Now you will have some time to analyse your own project data. You can use any of the functions we learnt here by simply copying and pasting them in a new R file. You can start by askig the following questions:</p>
+<ol style="list-style-type: decimal">
+<li>How many numeric variables are in my data? Focus on only one of them</li>
+<li>Create a histogram of such a variable</li>
+<li>Create a density plot</li>
+<li>Create a box plot</li>
+<li>What is the average of this variable? Calculate the mean and the median</li>
+<li>How spread is this variable? Calculate the standard deviation</li>
+<li>Is this data normally distributed? Create a qqplot</li>
+<li>What does this tell you about the topic of your data? Can you learn something from it?</li>
+</ol>
+</div>
+<div id="references" class="section level2 hasAnchor" number="2.7">
+<h2><span class="header-section-number">2.7</span> References<a href="univariate-data-analysis.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li>Dalgaard P. (2008). Introductory statistics with R. London: Springer.</li>
+<li>Sokal RR and Rohlf FJ. (1981), Biometry. San Francisco: W. H. Freeman (2nd edition).</li>
+<li>Everitt B and Holthorn T. (2011). An Introduction to applied multivariate analysis with R. London: Springer.</li>
+</ol>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="introduction-to-programming-in-r.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="bivariate-data-analysis.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/02-Univariate-data-analysis.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
