@@ -1,0 +1,6 @@
+Package: placeholder
+Type: Book
+Title: Data analysis in R
+Version: 0.0.1
+Imports: bookdown, ggplot2, HSAUR2, MVA, dslabs, ggplot2, ggrepel, rafalib, gplots, corrplot, pheatmap, rvest, wordcloud, tm, e1071, gmodels, rlang, neuralnet
+Remotes: rstudio/bookdown
